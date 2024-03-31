@@ -1,0 +1,3 @@
+/home/lggur/AndroidStudioProjects/fclient/app/src/main/cpp/CMakeFiles/fclient.dir
+/home/lggur/AndroidStudioProjects/fclient/app/src/main/cpp/CMakeFiles/edit_cache.dir
+/home/lggur/AndroidStudioProjects/fclient/app/src/main/cpp/CMakeFiles/rebuild_cache.dir
