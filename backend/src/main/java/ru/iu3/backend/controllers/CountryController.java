@@ -6,14 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import ru.iu3.backend.models.Artist;
 import ru.iu3.backend.models.Country;
 import ru.iu3.backend.repositories.CountryRepository;
 
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -22,9 +20,17 @@ public class CountryController {
     CountryRepository countryRepository;
 
     @GetMapping("/countries")
-    public List
-    getAllCountries() {
+    public List getAllCountries() {
         return countryRepository.findAll();
+    }
+
+    @GetMapping("/countries/{id}/artists")
+    public ResponseEntity<List<Artist>> getCountryArtists(@PathVariable(value = "id") Long countryId) {
+        Optional<Country> cc = countryRepository.findById(countryId);
+        if (cc.isPresent()) {
+            return ResponseEntity.ok(cc.get().artists);
+        }
+        return ResponseEntity.ok(new ArrayList<Artist>());
     }
 
     @PostMapping("/countries")
@@ -62,7 +68,7 @@ public class CountryController {
     }
 
     @DeleteMapping("/countries/{id}")
-    public Map<String, Boolean> deleteCountry(@PathVariable(value = "id") Long countryId) {
+    public ResponseEntity<Object> deleteCountry(@PathVariable(value = "id") Long countryId) {
         Optional<Country> country = countryRepository.findById(countryId);
         Map<String, Boolean> resp = new HashMap<>();
 
@@ -70,7 +76,6 @@ public class CountryController {
             countryRepository.delete(country.get());
             resp.put("deleted", Boolean.TRUE);
         } else resp.put("deleted", Boolean.FALSE);
-
-        return resp;
+        return ResponseEntity.ok(resp);
     }
 }
